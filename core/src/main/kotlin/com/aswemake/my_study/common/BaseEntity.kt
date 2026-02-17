@@ -28,6 +28,4 @@ class BaseEntity(
     @LastModifiedBy
     @Column(name = "updated_by")
     var updatedBy: String? = null
-) {
-
-}
+)

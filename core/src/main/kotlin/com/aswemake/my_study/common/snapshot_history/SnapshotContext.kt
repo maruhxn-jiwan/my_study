@@ -1,6 +1,6 @@
-package com.aswemake.my_study.common
+package com.aswemake.my_study.common.snapshot_history
 
-object SnapshotContext {
+internal object SnapshotContext {
     private val holder = ThreadLocal<SnapshotContextData>()
 
     fun set(data: SnapshotContextData) = holder.set(data)

@@ -1,14 +1,22 @@
 package com.aswemake.my_study.config
 
+import com.aswemake.my_study.common.snapshot_history.SnapshotEntityListenerSupport
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.support.TransactionTemplate
 import java.util.Optional
 
 @Configuration
 @EnableJpaAuditing
-class JpaConfig {
+class JpaConfig(eventPublisher: ApplicationEventPublisher) {
+
+    init {
+        SnapshotEntityListenerSupport.eventPublisher = eventPublisher
+    }
 
     /**
      * 스프링 시큐리티 사용 시, SecurityContextHolder에서 사용자 정보 뽑아오기
@@ -17,4 +25,7 @@ class JpaConfig {
     fun auditorAware(): AuditorAware<String> = AuditorAware {
         Optional.ofNullable("system")
     }
+
+    @Bean
+    fun transactionTemplate(txManager: PlatformTransactionManager) = TransactionTemplate(txManager)
 }

@@ -5,7 +5,7 @@ spring:
     compose:
       enabled: true
       lifecycle-management: start_and_stop
-      file: docker-compose-local.yml
+      file: modules/docker/docker-compose-local.yml
 
 ---
 spring.config.activate.on-profile: test, dev, stage, prod

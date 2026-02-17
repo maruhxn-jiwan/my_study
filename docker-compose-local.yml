@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:8.0.45
+    environment:
+      MYSQL_DATABASE: my_study
+      MYSQL_USER: maruhxn
+      MYSQL_PASSWORD: maruhxn
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "13306:3306"

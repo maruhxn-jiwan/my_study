@@ -1,0 +1,16 @@
+spring.config.activate.on-profile: default, local
+
+spring:
+  docker:
+    compose:
+      enabled: true
+      lifecycle-management: start_and_stop
+      file: docker-compose-local.yml
+
+---
+spring.config.activate.on-profile: test, dev, stage, prod
+
+spring:
+  docker:
+    compose:
+      enabled: false

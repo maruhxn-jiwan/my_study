@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: my_study
+  config:
+    import:
+      - db.yml
+      - docker.yml

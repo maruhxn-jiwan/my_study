@@ -1,0 +1,61 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+---
+spring.config.activate.on-profile: default, local
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:13306/my_study?rewriteBatchedStatements=true
+    username: local
+    password: local
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+---
+spring.config.activate.on-profile: test
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+---
+spring.config.activate.on-profile: dev
+
+spring:
+  datasource:
+    url: jdbc:mysql://dev-em-db:3306/my_study?rewriteBatchedStatements=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+---
+spring.config.activate.on-profile: stage
+
+spring:
+  datasource:
+    url: jdbc:mysql://stage-em-db:3306/my_study?rewriteBatchedStatements=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+---
+spring.config.activate.on-profile: prod
+
+spring:
+  datasource:
+    url: jdbc:mysql://em-db:3306/my_study?rewriteBatchedStatements=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver

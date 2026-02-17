@@ -35,6 +35,8 @@ subprojects {
         }
     }
 
+    val mockitoAgent: Configuration by configurations.creating
+
     dependencies {
         val implementation by configurations
         val testImplementation by configurations
@@ -43,6 +45,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+        mockitoAgent("org.mockito:mockito-core") { isTransitive = false }
     }
 
     configure<KotlinJvmProjectExtension> {
@@ -54,5 +57,9 @@ subprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
         systemProperty("spring.profiles.active", "test")
+        jvmArgs(
+            "-javaagent:${mockitoAgent.asPath}",
+            "-Xshare:off" // CDS 기능 비활성화 ->  "OpenJDK 64-Bit Server VM warning: Sharing is only supported for ..." 에러 해결
+        )
     }
 }

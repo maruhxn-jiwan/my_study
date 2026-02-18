@@ -1,7 +1,5 @@
 package com.aswemake.my_study.config
 
-import com.aswemake.my_study.common.snapshot_history.SnapshotEntityListenerSupport
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
@@ -12,11 +10,7 @@ import java.util.Optional
 
 @Configuration
 @EnableJpaAuditing
-class JpaConfig(eventPublisher: ApplicationEventPublisher) {
-
-    init {
-        SnapshotEntityListenerSupport.eventPublisher = eventPublisher
-    }
+class JpaConfig() {
 
     /**
      * 스프링 시큐리티 사용 시, SecurityContextHolder에서 사용자 정보 뽑아오기

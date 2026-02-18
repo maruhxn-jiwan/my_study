@@ -10,6 +10,9 @@ import java.time.LocalDateTime
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
 abstract class SnapshotHistoryEntity(
+    @Column(name = "source_id", nullable = false)
+    var sourceId: Long,
+
     @CreatedDate
     @Column(name = "snapshot_at", updatable = false)
     var snapshotAt: LocalDateTime? = null,

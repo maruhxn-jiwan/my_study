@@ -8,4 +8,6 @@ data class SnapshotInsertEvent(
 data class SnapshotUpdateEvent(
     val entity: Snapshotable<*>,
     val context: SnapshotContextData?,
+    val historyEntityName: String,
+    val sourceEntityId: Long,
 )

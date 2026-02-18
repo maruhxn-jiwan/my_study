@@ -8,27 +8,34 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
 @Component
-class SnapshotEntityListener {
+class SnapshotEntityListener(
+    private val publisher: ApplicationEventPublisher
+) {
 
     @PostPersist
     fun onInsert(entity: Any) {
         if (entity !is Snapshotable<*>) return
-        val publisher = SnapshotEntityListenerSupport.eventPublisher
-        publisher.publishEvent(SnapshotInsertEvent(entity, SnapshotContext.get()))
+        val context = SnapshotContext.get()
+        publisher.publishEvent(SnapshotInsertEvent(entity.toSnapshot(context)))
     }
 
     @PostUpdate
     @PostRemove
     fun onUpdateOrRemove(entity: Any) {
         if (entity !is Snapshotable<*>) return
-        val publisher = SnapshotEntityListenerSupport.eventPublisher
+
+        val context = SnapshotContext.get()
         val cls = entity.historyClass()
         val entityName = cls.getAnnotation(Entity::class.java)?.name
             ?.takeIf { it.isNotEmpty() } ?: cls.simpleName
-        publisher.publishEvent(SnapshotUpdateEvent(entity, SnapshotContext.get(), entityName, entity.entityId()))
-    }
-}
 
-object SnapshotEntityListenerSupport {
-    lateinit var eventPublisher: ApplicationEventPublisher
+        publisher.publishEvent(
+            SnapshotUpdateEvent(
+                entitySnapshot = entity.toSnapshot(context),
+                historyClazz = entity.historyClass(),
+                historyEntityName = entityName,
+                sourceEntityId = entity.entityId()
+            )
+        )
+    }
 }

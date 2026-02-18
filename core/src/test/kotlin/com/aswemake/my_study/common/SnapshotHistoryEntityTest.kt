@@ -24,6 +24,9 @@ class SnapshotHistoryEntityTest {
     @Autowired
     private lateinit var em: EntityManager
 
+    /**
+     * SnapshotEventHandler의 @TransactionalEventListener(phase = BEFORE_COMMIT) 때문에 tx 템플릿을 통해 명시적 커밋
+     */
     @Autowired
     private lateinit var tx: TransactionTemplate
 
@@ -167,6 +170,56 @@ class SnapshotHistoryEntityTest {
         assertThat(second.validFrom).isNotNull()
         assertThat(second.validTo).isNull()
         assertThat(first.validTo).isEqualTo(second.validFrom)
+    }
+
+    @Test
+    fun `생성-수정3회-삭제 시 총 5개의 이력이 순서대로 남는다`() {
+        // 1. 생성
+        val sourceId = tx.execute {
+            val source = createUser(name = "원본")
+            em.persist(source)
+            em.flush()
+            source.userId
+        }!!
+
+        // 2. 수정 3회
+        listOf("수정1", "수정2", "수정3").forEach { newName ->
+            tx.execute {
+                val source = em.find(User::class.java, sourceId)
+                source.name = newName
+                em.flush()
+            }
+        }
+
+        // 3. 삭제
+        tx.execute {
+            val source = em.find(User::class.java, sourceId)
+            em.remove(source)
+            em.flush()
+        }
+
+        val histories = tx.execute {
+            em.createQuery(
+                "SELECT h FROM UserHistory h ORDER BY h.snapshotAt ASC",
+                UserHistory::class.java
+            ).resultList
+        }!!
+
+        // 총 5개 이력: INSERT + UPDATE×3 + DELETE
+        assertThat(histories).hasSize(5)
+        assertThat(histories.map { it.name }).containsExactly("원본", "수정1", "수정2", "수정3", "수정3")
+
+        // 마지막(DELETE 시점) 제외한 모든 이력은 validTo가 닫혀 있어야 한다
+        histories.dropLast(1).forEach { assertThat(it.validTo).isNotNull() }
+
+        // 마지막 이력(DELETE 스냅샷)은 validFrom이 설정되고 validTo는 열려 있어야 한다
+        assertThat(histories.last().validFrom).isNotNull()
+        assertThat(histories.last().validTo).isNull()
+
+        // 연속된 이력 간 validTo와 validFrom이 일치해야 한다
+        histories.zipWithNext().forEach { (prev, next) ->
+            assertThat(prev.validTo).isEqualTo(next.validFrom)
+        }
     }
 
     @Test

@@ -4,8 +4,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.AuditorAware
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
-import org.springframework.transaction.PlatformTransactionManager
-import org.springframework.transaction.support.TransactionTemplate
 import java.util.Optional
 
 @Configuration
@@ -19,7 +17,4 @@ class JpaConfig() {
     fun auditorAware(): AuditorAware<String> = AuditorAware {
         Optional.ofNullable("system")
     }
-
-    @Bean
-    fun transactionTemplate(txManager: PlatformTransactionManager) = TransactionTemplate(txManager)
 }

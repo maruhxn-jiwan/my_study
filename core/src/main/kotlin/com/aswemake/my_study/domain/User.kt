@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "users")
@@ -21,6 +22,9 @@ class User(
     @Column(name = "email")
     val email: String,
 
+    @Column(name = "deleted_at")
+    var deletedAt: LocalDateTime? = null,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Long? = null,
@@ -28,6 +32,16 @@ class User(
 
     fun updateName(name: String) {
         this.name = name
+    }
+
+    fun withdraw(deletedAt: LocalDateTime) {
+        this.deletedAt = deletedAt
+    }
+
+    companion object {
+        fun create(userCreateCommand: UserCreateCommand): User {
+            return User(userCreateCommand.name, userCreateCommand.email)
+        }
     }
 
     // --- 스냅샷 헬퍼 메서드 ---

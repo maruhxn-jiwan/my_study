@@ -1,26 +1,18 @@
 package com.aswemake.my_study.service
 
-import com.aswemake.my_study.common.TimeProvider
 import com.aswemake.my_study.domain.UserCreateCommand
 import com.aswemake.my_study.infra.UserRepository
-import com.aswemake.my_study.utils.IntegrationTest
+import com.aswemake.my_study.IntegrationTest
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
 
-class UserWriterTest : IntegrationTest() {
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
-
-    @Autowired
-    private lateinit var userWriter: UserWriter
-
-    @Autowired
-    private lateinit var timeProvider: TimeProvider
+class UserWriterTest(
+    private val userRepository: UserRepository,
+    private val userWriter: UserWriter
+) : IntegrationTest() {
 
     @BeforeEach
     fun setUp() {

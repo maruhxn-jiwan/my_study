@@ -1,6 +1,6 @@
 package com.aswemake.my_study.common
 
-import com.aswemake.my_study.utils.IntegrationTest
+import com.aswemake.my_study.IntegrationTest
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityManager
 import jakarta.persistence.GeneratedValue

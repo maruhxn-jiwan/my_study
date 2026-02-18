@@ -1,5 +1,6 @@
 package com.aswemake.my_study.common
 
+import com.aswemake.my_study.IntegrationTest
 import com.aswemake.my_study.TestcontainersConfiguration
 import com.aswemake.my_study.common.snapshot_history.SnapshotOperation
 import com.aswemake.my_study.domain.User
@@ -16,7 +17,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.support.TransactionTemplate
 
-@SpringBootTest
+@SpringBootTest(classes = [IntegrationTest.Config::class])
 @Import(TestcontainersConfiguration::class)
 @TestPropertySource(properties = ["spring.jpa.hibernate.ddl-auto=create-drop"])
 class SnapshotHistoryEntityTest {

@@ -1,17 +1,20 @@
 package com.aswemake.my_study.common.snapshot_history
 
+import com.aswemake.my_study.common.TimeProvider
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
-import java.time.LocalDateTime
 
 @Component
-class SnapshotEventHandler(private val em: EntityManager) {
+class SnapshotEventHandler(
+    private val em: EntityManager,
+    private val timeProvider: TimeProvider
+) {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handleInsert(event: SnapshotInsertEvent) {
-        val now = LocalDateTime.now()
+        val now = timeProvider.getCurrentTime()
 
         val snapshot = event.entitySnapshot
         snapshot.open(now)
@@ -20,7 +23,7 @@ class SnapshotEventHandler(private val em: EntityManager) {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun handleUpdateOrDelete(event: SnapshotUpdateEvent) {
-        val now = LocalDateTime.now()
+        val now = timeProvider.getCurrentTime()
         val openHistories = em.createQuery(
             "SELECT h FROM ${event.historyEntityName} h WHERE h.sourceId = :sourceId AND h.validTo IS NULL",
             event.historyClazz,

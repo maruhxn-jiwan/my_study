@@ -1,16 +1,17 @@
 package com.aswemake.my_study.service
 
 import com.aswemake.my_study.common.DomainService
+import com.aswemake.my_study.common.TimeProvider
 import com.aswemake.my_study.common.snapshot_history.SnapshotOperation
 import com.aswemake.my_study.domain.User
 import com.aswemake.my_study.domain.UserCreateCommand
 import com.aswemake.my_study.infra.UserRepository
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @DomainService
 class UserWriter(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val timeProvider: TimeProvider
 ) {
 
     @Transactional
@@ -32,9 +33,10 @@ class UserWriter(
     @Transactional
     @SnapshotOperation(changeType = "WITHDRAW", changeReason = "회원 탈퇴")
     fun withdraw(userId: Long, updatedName: String) {
+        val now = timeProvider.getCurrentTime()
         val user = userRepository.findById(userId)
             ?: throw NoSuchElementException("유저 정보가 존재하지 않습니다. userId: $userId")
 
-        user.withdraw(LocalDateTime.now())
+        user.withdraw(now)
     }
 }

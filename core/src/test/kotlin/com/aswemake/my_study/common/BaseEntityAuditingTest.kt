@@ -1,6 +1,6 @@
 package com.aswemake.my_study.common
 
-import com.aswemake.my_study.TestcontainersConfiguration
+import com.aswemake.my_study.utils.IntegrationTest
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityManager
 import jakarta.persistence.GeneratedValue
@@ -9,20 +9,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
-import org.springframework.test.context.TestPropertySource
-import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
-@Transactional
-@Import(TestcontainersConfiguration::class)
-@TestPropertySource(properties = ["spring.jpa.hibernate.ddl-auto=create-drop"])
-class BaseEntityAuditingTest {
-
-    @Autowired
-    private lateinit var em: EntityManager
+class BaseEntityAuditingTest : IntegrationTest() {
 
     @Test
     fun `저장 시 createdBy와 updatedBy가 자동으로 설정된다`() {

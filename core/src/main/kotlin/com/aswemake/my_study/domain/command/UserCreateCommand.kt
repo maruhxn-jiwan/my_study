@@ -1,4 +1,4 @@
-package com.aswemake.my_study.domain
+package com.aswemake.my_study.domain.command
 
 data class UserCreateCommand(
     val name: String,

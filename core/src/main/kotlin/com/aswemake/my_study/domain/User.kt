@@ -3,6 +3,7 @@ package com.aswemake.my_study.domain
 import com.aswemake.my_study.common.snapshot_history.SnapshotContextData
 import com.aswemake.my_study.common.snapshot_history.SnapshotEntityListener
 import com.aswemake.my_study.common.snapshot_history.Snapshotable
+import com.aswemake.my_study.domain.command.UserCreateCommand
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners

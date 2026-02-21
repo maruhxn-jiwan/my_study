@@ -4,7 +4,7 @@ import com.aswemake.my_study.common.DomainService
 import com.aswemake.my_study.common.TimeProvider
 import com.aswemake.my_study.common.snapshot_history.SnapshotOperation
 import com.aswemake.my_study.domain.User
-import com.aswemake.my_study.domain.UserCreateCommand
+import com.aswemake.my_study.domain.command.UserCreateCommand
 import com.aswemake.my_study.infra.UserRepository
 import org.springframework.transaction.annotation.Transactional
 

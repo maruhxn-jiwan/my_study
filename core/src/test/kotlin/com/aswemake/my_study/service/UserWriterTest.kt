@@ -1,8 +1,8 @@
 package com.aswemake.my_study.service
 
-import com.aswemake.my_study.domain.UserCreateCommand
-import com.aswemake.my_study.infra.UserRepository
 import com.aswemake.my_study.IntegrationTest
+import com.aswemake.my_study.domain.command.UserCreateCommand
+import com.aswemake.my_study.infra.UserRepository
 import io.mockk.every
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

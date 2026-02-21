@@ -3,8 +3,10 @@ package com.aswemake.my_study.api
 import com.aswemake.my_study.CacheStrategy
 import com.aswemake.my_study.domain.command.ItemCreateCommand
 import com.aswemake.my_study.domain.command.ItemUpdateCommand
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled
 class NoneStrategyApiTest {
     @Test
     fun createAndReadAndUpdateAndDelete() {

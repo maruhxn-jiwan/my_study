@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":modules:logging"))
     testImplementation(project(":modules:docker"))
 
     implementation("org.springframework.boot:spring-boot-starter-aspectj")

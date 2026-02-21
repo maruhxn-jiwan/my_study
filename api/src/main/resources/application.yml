@@ -5,3 +5,4 @@ spring:
     import:
       - db.yml
       - docker.yml
+      - redis.yml

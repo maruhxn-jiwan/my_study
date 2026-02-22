@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(project(":core"))
     implementation(project(":modules:docker"))
-    implementation(project(":modules:redis"))
+    implementation(project(":modules:cache"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webmvc")

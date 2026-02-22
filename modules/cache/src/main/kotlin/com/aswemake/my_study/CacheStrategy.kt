@@ -38,4 +38,10 @@ enum class CacheStrategy {
      * = 캐시가 존재할 때만 유효
      */
     PROBABILISTIC_EARLY_RECOMPUTATION,
+
+    /**
+     * 중복된 캐시 미스 요청이 올 때, 분산 락을 통해 데이터 소스로의 요청을 1번으로 제한하는 전략
+     * -> 하나의 키에 대한 중복 요청일 경우 유효
+     */
+    REQUEST_COLLAPSING
 }

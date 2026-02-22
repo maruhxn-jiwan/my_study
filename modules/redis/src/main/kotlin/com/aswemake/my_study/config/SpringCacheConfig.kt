@@ -11,13 +11,41 @@ import org.springframework.data.redis.serializer.RedisSerializationContext
 import tools.jackson.module.kotlin.KotlinModule
 import java.time.Duration
 
+/**
+ * Spring Data Redis 를 사용한다면 Spring Boot 가 `RedisCacheManager` 를 자동으로 설정해줌
+ *
+ * 하지만 Redis 는 직렬화/역직렬화 때문에 별도의 캐시 설정이 필요하고 이 때 사용하는게 `RedisCacheConfiguration`
+ * `RedisCacheConfiguration`을 통해 다음을 오버라이드할 수 있음
+ * - computePrefixWith: Cache Key prefix 설정
+ * - entryTtl: 캐시 만료 시간
+ * - disableCachingNullValues: 캐싱할 때 null 값을 허용하지 않음 (#result == null 과 함께 사용해야 함)
+ * - serializeKeysWith: Key 를 직렬화할 때 사용하는 규칙. 보통은 String 형태로 저장
+ * - serializeValuesWith: Value 를 직렬화할 때 사용하는 규칙. Jackson2 를 많이 사용함
+ *
+ * 만약 캐시이름 별로 여러 세팅을 하고 싶다면 `RedisCacheManagerBuilderCustomizer` 를 선언해서 사용
+ */
 @Configuration
 @EnableCaching
 class SpringCacheConfig {
 
     @Bean
     fun cacheManager(connectionFactory: RedisConnectionFactory): RedisCacheManager {
+        val defaultCacheConfig = customCacheConfig()
+
+        return RedisCacheManager.builder(connectionFactory)
+            .withInitialCacheConfigurations(
+                mapOf(
+                    Pair("item", defaultCacheConfig.entryTtl(Duration.ofSeconds(10))),
+                    Pair("itemList", defaultCacheConfig.entryTtl(Duration.ofSeconds(10))),
+                )
+            )
+            .build()
+    }
+
+    private fun customCacheConfig(): RedisCacheConfiguration {
         val defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+            .computePrefixWith { "maruhxn::${it}::" }
+//            .entryTtl(Duration.ofMinutes(5))
             .disableCachingNullValues()
             .serializeValuesWith(
                 RedisSerializationContext.SerializationPair.fromSerializer(
@@ -27,14 +55,6 @@ class SpringCacheConfig {
                         .build(),
                 )
             )
-
-        return RedisCacheManager.builder(connectionFactory)
-            .withInitialCacheConfigurations(
-                mapOf(
-                    Pair("item", defaultCacheConfig.entryTtl(Duration.ofSeconds(1))),
-                    Pair("itemList", defaultCacheConfig.entryTtl(Duration.ofSeconds(1))),
-                )
-            )
-            .build()
+        return defaultCacheConfig
     }
 }

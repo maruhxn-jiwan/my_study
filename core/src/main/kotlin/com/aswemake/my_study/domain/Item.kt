@@ -17,7 +17,7 @@ class Item(
         private val NEXT_ID = AtomicLong()
 
         fun create(command: ItemCreateCommand) = Item(
-            itemId = NEXT_ID.getAndIncrement(),
+            itemId = NEXT_ID.incrementAndGet(),
             data = command.data
         )
     }

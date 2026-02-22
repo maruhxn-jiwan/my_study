@@ -13,5 +13,6 @@ enum class CacheStrategy {
      *
      * 추가적으로, 파라미터 입력값 검증 및 Rate Limit과 함께 사용하는 것이 권장됩니다
      */
-    NULL_OBJECT_PATTERN
+    NULL_OBJECT_PATTERN,
+    BLOOM_FILTER
 }

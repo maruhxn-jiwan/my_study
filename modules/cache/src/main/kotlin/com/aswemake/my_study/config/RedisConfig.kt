@@ -6,13 +6,14 @@ import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.StringRedisSerializer
 import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.jacksonObjectMapper
 
 @Configuration
 class RedisConfig {
 
     @Bean
     fun objectMapper(): ObjectMapper {
-        return ObjectMapper().apply { registeredModules() }
+        return jacksonObjectMapper()
     }
 
     @Bean

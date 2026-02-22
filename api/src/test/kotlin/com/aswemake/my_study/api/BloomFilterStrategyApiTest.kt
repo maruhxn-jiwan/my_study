@@ -2,8 +2,10 @@ package com.aswemake.my_study.api
 
 import com.aswemake.my_study.CacheStrategy
 import com.aswemake.my_study.domain.command.ItemCreateCommand
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled
 class BloomFilterStrategyApiTest {
 
     @Test

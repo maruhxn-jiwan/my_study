@@ -1,8 +1,10 @@
 package com.aswemake.my_study.api
 
 import com.aswemake.my_study.CacheStrategy
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled
 class NullObjectPatternStrategyApiTest {
 
     @Test

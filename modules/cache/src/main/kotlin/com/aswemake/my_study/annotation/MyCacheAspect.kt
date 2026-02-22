@@ -23,7 +23,7 @@ class MyCacheAspect(
 
     private val log = logger<MyCacheAspect>()
 
-    @Around("@annotation(MyCacheable)")
+    @Around("@annotation(myCacheable)")
     fun handleCacheable(joinPoint: ProceedingJoinPoint, myCacheable: MyCacheable): Any? {
         val cacheStrategy = myCacheable.strategy
         val cacheHandler = findCacheHandler(cacheStrategy)

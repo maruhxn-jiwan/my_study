@@ -17,9 +17,9 @@ class PerCacheHandler(
     override fun <T> fetch(
         key: String,
         ttl: Duration,
-        dataSourceSupplier: Supplier<T>,
+        dataSourceSupplier: Supplier<T?>,
         clazz: Class<T>
-    ): T {
+    ): T? {
         println("fetching $key")
         val cached = redisTemplate.opsForValue().get(key)
             ?: return refresh(key, ttl, dataSourceSupplier)
@@ -37,7 +37,7 @@ class PerCacheHandler(
         return data
     }
 
-    private fun <T> refresh(key: String?, ttl: Duration?, dataSourceSupplier: Supplier<T>): T {
+    private fun <T> refresh(key: String?, ttl: Duration?, dataSourceSupplier: Supplier<T?>): T? {
         println("refresh")
         val startMillis = Instant.now().toEpochMilli()
         val sourceResult = dataSourceSupplier.get()

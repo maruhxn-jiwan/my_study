@@ -17,9 +17,9 @@ class NoneCacheHandler : MyCacheHandler {
     override fun <T> fetch(
         key: String,
         ttl: Duration,
-        dataSourceSupplier: Supplier<T>,
+        dataSourceSupplier: Supplier<T?>,
         clazz: Class<T>
-    ): T {
+    ): T? {
         log.info("[NoneCacheHandler.fetch] key=$key")
         return dataSourceSupplier.get()
     }

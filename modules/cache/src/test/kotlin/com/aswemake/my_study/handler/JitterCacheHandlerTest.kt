@@ -58,16 +58,16 @@ class JitterCacheHandlerTest : RedisTestContainerSupport() {
 
     @Test
     fun fetch() {
-        val result1: String = fetchData()
-        val result2: String = fetchData()
-        val result3: String = fetchData()
+        val result1 = fetchData()
+        val result2 = fetchData()
+        val result3 = fetchData()
 
         assertThat(result1).isEqualTo("sourceData")
         assertThat(result2).isEqualTo("sourceData")
         assertThat(result3).isEqualTo("sourceData")
     }
 
-    private fun fetchData(): String {
+    private fun fetchData(): String? {
         return jitterCacheHandler.fetch(
             key = "test",
             ttl = Duration.ofSeconds(10),

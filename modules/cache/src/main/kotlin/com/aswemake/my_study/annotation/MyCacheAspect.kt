@@ -57,7 +57,7 @@ class MyCacheAspect(
     private fun findCacheHandler(cacheStrategy: CacheStrategy) =
         cacheHandlers.first { it.supports(cacheStrategy) }
 
-    private fun createDataSourceSupplier(joinPoint: ProceedingJoinPoint): Supplier<Any> {
+    private fun createDataSourceSupplier(joinPoint: ProceedingJoinPoint): Supplier<Any?> {
         return Supplier {
             try {
                 return@Supplier joinPoint.proceed()

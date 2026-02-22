@@ -29,9 +29,9 @@ class RequestCollapsingCacheHandler(
     override fun <T> fetch(
         key: String,
         ttl: Duration,
-        dataSourceSupplier: Supplier<T>,
+        dataSourceSupplier: Supplier<T?>,
         clazz: Class<T>
-    ): T {
+    ): T? {
         var cached = redisTemplate.opsForValue().get(key)
             ?.let { return DataSerializer.deserializeOrNull(it, clazz)!! }
 
@@ -67,8 +67,8 @@ class RequestCollapsingCacheHandler(
         return refresh(key, ttl, dataSourceSupplier)
     }
 
-    private fun <T> refresh(key: String, ttl: Duration, dataSourceSupplier: Supplier<T>): T {
-        val sourceResult: T = dataSourceSupplier.get()
+    private fun <T> refresh(key: String, ttl: Duration, dataSourceSupplier: Supplier<T?>): T? {
+        val sourceResult = dataSourceSupplier.get()
         put(key, ttl, sourceResult)
         return sourceResult
     }

@@ -43,5 +43,8 @@ enum class CacheStrategy {
      * 중복된 캐시 미스 요청이 올 때, 분산 락을 통해 데이터 소스로의 요청을 1번으로 제한하는 전략
      * -> 하나의 키에 대한 중복 요청일 경우 유효
      */
-    REQUEST_COLLAPSING
+    REQUEST_COLLAPSING,
+
+    // == Redis Cluster에서 특정 샤드에 읽기 부하가 집중되는 것을 막기 위한 애플리케이션 레벨 샤딩 전략 ==
+    APPLICATION_LEVEL_SHARDING_REPLICATION,
 }

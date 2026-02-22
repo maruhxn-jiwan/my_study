@@ -42,7 +42,7 @@ class PerCacheHandlerTest : RedisTestContainerSupport() {
         assertThat(result3).isEqualTo("sourceData")
     }
 
-    private fun fetchData(): String {
+    private fun fetchData(): String? {
         return cacheHandler.fetch(
             key = "test",
             ttl = Duration.ofSeconds(10),

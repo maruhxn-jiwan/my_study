@@ -22,9 +22,9 @@ class JitterCacheHandler(
     override fun <T> fetch(
         key: String,
         ttl: Duration,
-        dataSourceSupplier: Supplier<T>,
+        dataSourceSupplier: Supplier<T?>,
         clazz: Class<T>
-    ): T {
+    ): T? {
         val cached = redisTemplate.opsForValue().get(key)
         // 캐시에 없으면 DataSource로부터 가져오고, 캐시에 PUT
             ?: return refresh(key, ttl, dataSourceSupplier)
@@ -37,7 +37,7 @@ class JitterCacheHandler(
         return data
     }
 
-    private fun <T> refresh(key: String?, ttl: Duration, dataSourceSupplier: Supplier<T>): T {
+    private fun <T> refresh(key: String?, ttl: Duration, dataSourceSupplier: Supplier<T?>): T? {
         val sourceResult = dataSourceSupplier.get()
         put(key!!, ttl, sourceResult)
         return sourceResult

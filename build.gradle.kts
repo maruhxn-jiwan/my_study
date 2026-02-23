@@ -26,6 +26,7 @@ subprojects {
     the<DependencyManagementExtension>().apply {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.0.2")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.1.1")
         }
     }
 

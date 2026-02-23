@@ -1,6 +1,9 @@
 package com.aswemake.my_study.config
 
+import com.aswemake.my_study.MyCacheErrorHandler
+import org.springframework.cache.annotation.CachingConfigurer
 import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cache.interceptor.CacheErrorHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.cache.RedisCacheConfiguration
@@ -26,7 +29,7 @@ import java.time.Duration
  */
 @Configuration
 @EnableCaching
-class SpringCacheConfig {
+class SpringCacheConfig : CachingConfigurer {
 
     @Bean
     fun cacheManager(connectionFactory: RedisConnectionFactory): RedisCacheManager {
@@ -56,5 +59,13 @@ class SpringCacheConfig {
                 )
             )
         return defaultCacheConfig
+    }
+
+    /**
+     * CachingConfigurerSupport 상속 후 errorHandler 메서드 오버라이드하여
+     * 캐시 에러 핸들러 등록
+     */
+    override fun errorHandler(): CacheErrorHandler {
+        return MyCacheErrorHandler()
     }
 }

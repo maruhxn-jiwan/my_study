@@ -1,5 +1,6 @@
 dependencies {
     implementation(project(":modules:logging"))
+    implementation(project(":modules:resilience4j"))
     testImplementation(project(":modules:docker"))
 
     // AOP

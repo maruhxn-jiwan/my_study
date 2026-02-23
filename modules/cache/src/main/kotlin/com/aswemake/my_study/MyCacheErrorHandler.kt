@@ -1,18 +1,26 @@
 package com.aswemake.my_study
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import logger
 import org.springframework.cache.Cache
 import org.springframework.cache.interceptor.CacheErrorHandler
+import java.util.concurrent.TimeUnit
 
-class MyCacheErrorHandler : CacheErrorHandler {
+class MyCacheErrorHandler(
+    private val redisCircuitBreaker: CircuitBreaker
+) : CacheErrorHandler {
     private val log = logger<MyCacheErrorHandler>()
 
+    /**
+     * Redis 에러 발생 시, 예외 캐치 후 서킷 브레이커에 수동으로 실패 기록
+     */
     override fun handleCacheGetError(
         exception: RuntimeException,
         cache: Cache,
         key: Any
     ) {
         log.warn("[MyCacheErrorHandler.handleCacheGetError] 캐시 GET 에러. key: $key", exception)
+        redisCircuitBreaker.onError(0, TimeUnit.SECONDS, exception)
     }
 
     override fun handleCachePutError(

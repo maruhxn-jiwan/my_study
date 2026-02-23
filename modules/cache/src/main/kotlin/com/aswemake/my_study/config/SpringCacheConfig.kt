@@ -1,6 +1,7 @@
 package com.aswemake.my_study.config
 
 import com.aswemake.my_study.MyCacheErrorHandler
+import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import org.springframework.cache.annotation.CachingConfigurer
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.cache.interceptor.CacheErrorHandler
@@ -29,7 +30,9 @@ import java.time.Duration
  */
 @Configuration
 @EnableCaching
-class SpringCacheConfig : CachingConfigurer {
+class SpringCacheConfig(
+    private val redisCircuitBreaker: CircuitBreaker
+) : CachingConfigurer {
 
     @Bean
     fun cacheManager(connectionFactory: RedisConnectionFactory): RedisCacheManager {
@@ -66,6 +69,6 @@ class SpringCacheConfig : CachingConfigurer {
      * 캐시 에러 핸들러 등록
      */
     override fun errorHandler(): CacheErrorHandler {
-        return MyCacheErrorHandler()
+        return MyCacheErrorHandler(redisCircuitBreaker)
     }
 }

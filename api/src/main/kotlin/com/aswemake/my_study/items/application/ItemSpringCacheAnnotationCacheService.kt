@@ -13,7 +13,15 @@ import org.springframework.stereotype.Service
 class ItemSpringCacheAnnotationCacheService(
     private val itemManager: ItemManager
 ) : ItemService {
-    @Cacheable(cacheNames = ["item"], key = "#itemId")
+    /**
+     * condition 조건에 서킷 상태 체크 로직 추가
+     */
+    @Cacheable(
+        cacheNames = ["item"],
+        key = "#itemId",
+        unless = "#result == null",
+        condition = "#p0 != null && @cacheStateProvider.isCacheEnabled()"
+    )
     override fun get(itemId: Long) = itemManager.get(itemId)
 
     @Cacheable(cacheNames = ["itemList"], key = "#page + ':' + #size")

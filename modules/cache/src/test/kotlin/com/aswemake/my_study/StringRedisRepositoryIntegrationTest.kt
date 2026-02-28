@@ -1,14 +1,15 @@
 package com.aswemake.my_study
 
+import com.aswemake.my_study.repository.StringRedisRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 
-class RedisRepositoryIntegrationTest : RedisTestContainerSupport() {
+class StringRedisRepositoryIntegrationTest : RedisTestContainerSupport() {
 
     @Autowired
-    private lateinit var redisRepository: RedisRepository
+    private lateinit var redisRepository: StringRedisRepository
 
     @Test
     fun `set 후 get 하면 저장한 값이 반환된다`() {

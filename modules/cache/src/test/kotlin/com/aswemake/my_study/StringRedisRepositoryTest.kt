@@ -1,5 +1,6 @@
 package com.aswemake.my_study
 
+import com.aswemake.my_study.repository.StringRedisRepository
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
@@ -13,12 +14,12 @@ import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import java.time.Duration
 
-class RedisRepositoryTest {
+class StringRedisRepositoryTest {
 
     private lateinit var redisTemplate: StringRedisTemplate
     private lateinit var valueOps: ValueOperations<String, String>
     private lateinit var circuitBreaker: CircuitBreaker
-    private lateinit var sut: RedisRepository
+    private lateinit var sut: StringRedisRepository
 
     @BeforeEach
     fun setUp() {
@@ -32,7 +33,7 @@ class RedisRepositoryTest {
             .build()
         circuitBreaker = CircuitBreakerRegistry.of(config).circuitBreaker("test")
 
-        sut = RedisRepository(redisTemplate, circuitBreaker)
+        sut = StringRedisRepository(redisTemplate, circuitBreaker)
     }
 
     @Test

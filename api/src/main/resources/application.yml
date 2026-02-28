@@ -6,3 +6,4 @@ spring:
       - db.yml
       - docker.yml
       - redis.yml
+      - resilience4j.yml

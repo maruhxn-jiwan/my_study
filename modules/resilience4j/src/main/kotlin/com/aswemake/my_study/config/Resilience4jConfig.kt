@@ -8,16 +8,12 @@ import org.springframework.context.annotation.Configuration
 import java.time.Duration
 
 @Configuration
-class Resilience4jConfig {
+class Resilience4jConfig(
+    val circuitBreakerProperty: CircuitBreakerProperty,
+) {
 
-    @Bean
-    fun redisCircuitBreakerConfig(): CircuitBreakerConfig {
-        return CircuitBreakerConfig.custom()
-            .failureRateThreshold(50F) // 실패 비율이 50% 잉상이면 서킷 오픈
-            .waitDurationInOpenState(Duration.ofSeconds(10)) // 서킷이 오픈 상태 유지하는 시간
-            .slidingWindowSize(20)
-            .minimumNumberOfCalls(2) // 서킷이 오픈되기 전, 최소 요청 횟수
-            .build()
+    companion object {
+        const val CIRCUIT_REDIS: String = "CB_REDIS"
     }
 
     @Bean
@@ -25,6 +21,19 @@ class Resilience4jConfig {
         registry: CircuitBreakerRegistry,
         redisCircuitBreakerConfig: CircuitBreakerConfig,
     ): CircuitBreaker {
-        return registry.circuitBreaker("redis", redisCircuitBreakerConfig)
+        return registry.circuitBreaker(CIRCUIT_REDIS, redisCircuitBreakerConfig)
+    }
+
+    @Bean
+    fun redisCircuitBreakerConfig(): CircuitBreakerConfig {
+        return CircuitBreakerConfig.custom()
+            .failureRateThreshold(circuitBreakerProperty.failureRateThreshold)
+            .slowCallDurationThreshold(Duration.ofMillis(circuitBreakerProperty.slowCallDurationThreshold))
+            .slowCallRateThreshold(circuitBreakerProperty.slowCallRateThreshold)
+            .waitDurationInOpenState(Duration.ofMillis(circuitBreakerProperty.waitDurationInOpenState))
+            .minimumNumberOfCalls(circuitBreakerProperty.minimumNumberOfCalls)
+            .slidingWindowSize(circuitBreakerProperty.slidingWindowSize)
+            .permittedNumberOfCallsInHalfOpenState(circuitBreakerProperty.permittedNumberOfCallsInHalfOpenState)
+            .build()
     }
 }
